@@ -60,7 +60,8 @@ def get_count():
 
 call_menu()
 while True:
-    count = get_count() #
+    count = get_count() #calculates the global count at the beginning of the program so that the user can exit
+                        #without resetting the global count
     command = input("Enter one of the listed commands: ")
     if command == "add":
         add_song()
