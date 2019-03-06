@@ -29,12 +29,15 @@ def clear_file():
 def list_song():
     count = 0
     f = open("MusicDB.txt", "r")
-    for entry in f:
-        clean = []
-        clean_entry = entry.replace('"', '').strip("{").strip("}").strip(",").split("}{")
-    for s in clean_entry:
-        count = count + 1
-        print("Song #",count,":",s,"\n")
+    try:
+        for entry in f:
+            clean = []
+            clean_entry = entry.replace('"', '').strip("{").strip("}").strip(",").split("}{") #removes the ugly stuff
+        for s in clean_entry:
+            count = count + 1
+            print("Song #",count,":",s,"\n")
+    except UnboundLocalError:
+        print("\nYour file is empty!\n")
 
 def call_menu():
     print("add : Add a new song to the music database\n"
@@ -42,17 +45,29 @@ def call_menu():
      "save : Save the music database\n"
      "help : Display this menu\n"
      "exit : Exit the Program\n")
-clear_file()
+
+def get_count():
+    count = 0
+    f = open("MusicDB.txt", "r")
+    try:
+        for entry in f:
+            entries = entry.split("}{")
+        for entry in entries:
+            count = count + 1
+    except:
+        return 0
+    return count
+
 call_menu()
-big_count = 0
 while True:
+    count = get_count() #
     command = input("Enter one of the listed commands: ")
     if command == "add":
         add_song()
-        big_count = big_count + 1
-    elif command == "save" and big_count <= 8:
+    elif command == "save" and count < 8:
         save_song()
-    elif command == "save" and big_count > 8:
+        Song = Song.fromkeys(Song, None) #resets all values in Song to None once they've been saved
+    elif command == "save" and count >= 8:
         print("Your file is full!")
     elif command == "list":
         list_song()
@@ -60,6 +75,8 @@ while True:
         call_menu()
     elif command == "exit":
         break
+    elif command == "clear":
+        clear_file()
     else:
         print("Error, that's not a valid command")
         continue
